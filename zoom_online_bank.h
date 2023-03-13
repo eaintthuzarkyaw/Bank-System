@@ -61,7 +61,7 @@ void emailExistChecking(char toCheck[50]);
 void compare_twoCharArray(char first[50], char second[50]);
 void nrc_validation(char nrc_toCheck[50]);
 void myStrongPassword(char pass[50]);
-void phone_validation(unsigned long long int phone_toValid);
+void phone_validation(unsigned int phone_toValid);
 void myStringCopy(char first[50], char second[50]);
 void login(char lEmail[50],char lPassword[50]);
 int integerCounting(unsigned long long int intToCount);
@@ -118,7 +118,7 @@ void loadingAllDataFromFile(){
     } else{
         for(int ncc=0; ncc<SIZE ; ncc++){
 
-            fscanf(fptr ,"%u%s%s%s%s%s%s%u%u%f%s%d%llu%u%s%u%s",&db[ncc].id,&db[ncc].name,&db[ncc].nrc,&db[ncc].email,&db[ncc].password,&db[ncc].pOrb,&db[ncc].loan_s,&db[ncc].monthly_income,&db[ncc].loan_amount ,&db[ncc].loan_rate , &db[ncc].acc_s ,&db[ncc].acc_level,&db[ncc].phNumber , &db[ncc].cur_amount,&db[ncc].address ,&db[ncc].transAmoLimitPerDay,&db[ncc].trc[0].note );
+            fscanf(fptr ,"%u%s%s%s%s%s%s%u%u%f%s%d%u%u%s%u%s",&db[ncc].id,&db[ncc].name,&db[ncc].nrc,&db[ncc].email,&db[ncc].password,&db[ncc].pOrb,&db[ncc].loan_s,&db[ncc].monthly_income,&db[ncc].loan_amount ,&db[ncc].loan_rate , &db[ncc].acc_s ,&db[ncc].acc_level,&db[ncc].phNumber , &db[ncc].cur_amount,&db[ncc].address ,&db[ncc].transAmoLimitPerDay,&db[ncc].trc[0].note );
 
             if(db[ncc].email[0] == '\0'){
                 break;
@@ -133,7 +133,7 @@ void printingAllData(){
 
      for(int ncc=0; ncc<users ; ncc++){
 
-        printf("%u-%s-%s-%s-%s-%s-%s-%u-%u-%f-%s-%d-%llu-%u-%s-%u-%s\n",db[ncc].id,db[ncc].name,db[ncc].nrc,db[ncc].email,db[ncc].password,
+        printf("%u-%s-%s-%s-%s-%s-%s-%u-%u-%f-%s-%d-%u-%u-%s-%u-%s\n",db[ncc].id,db[ncc].name,db[ncc].nrc,db[ncc].email,db[ncc].password,
                db[ncc].pOrb, db[ncc].loan_s,db[ncc].monthly_income,db[ncc].loan_amount ,db[ncc].loan_rate , db[ncc].acc_s ,db[ncc].acc_level,
                db[ncc].phNumber , db[ncc].cur_amount,db[ncc].address ,db[ncc].transAmoLimitPerDay,db[ncc].trc[0].note);
     }
@@ -146,7 +146,7 @@ void registration(){
     char re_name[50];
     char re_nrc[50];
     char re_password[50];
-    unsigned long long int re_phone[50];
+    unsigned int re_phone = 0;
     unsigned int re_amount = 0;
 
     printf("This is NCC bank registration:\n");
@@ -208,7 +208,7 @@ void registration(){
             while(phone_valid == -1){
 
                 printf("Enter your phone number:");
-                scanf("%llu",&re_phone[0]);
+                scanf("%u",&re_phone);
 
                 phone_validation(re_phone);
 
@@ -477,46 +477,23 @@ int integerCounting(unsigned long long int intToCount){
     return intCount;
 }
 
-void phone_validation(unsigned long long int phone_toValid){
+void phone_validation(unsigned int phone_toValid){
 
+int phone_counter = 0;
 
-    int phone_format[3] = {9,5,9};
-    int count[50];
+    for(int i=0; i<users; i++){
 
-    int phone_counter = integerCounting(phone_toValid);
-
-    int phone_count = 0;
-
-    int phone_format_count = 0;
-
-    for(int i=0; i<phone_counter; i++){
-
-        if(phone_format[i] != phone_toValid){
-            phone_count++;
-        }else{
-            break;
-        }
-
+       if(phone_toValid != db[i].phNumber){
+          phone_counter++;
+       }else{
+          phone_valid = -1;
+          break;
+       }
     }
 
-
-
-
-
-
-//    for(int i=0; i<users; i++){
-//
-//       if(phone_toValid != db[i].phNumber){
-//          phone_counter++;
-//       }else{
-//          phone_valid = -1;
-//          break;
-//       }
-//    }
-//
-//    if(phone_counter == users){
-//        phone_valid = 1;
-//    }
+    if(phone_counter == users){
+        phone_valid = 1;
+    }
 }
 
 void myStringCopy(char first[50], char second[50]){
